@@ -20,12 +20,16 @@ val keystoreProperties = Properties().apply {
 
 android {
     namespace = "io.github.marcuspage5715.primechecker"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "io.github.marcuspage5715.primechecker"
+        // 24 (Android 7.0) keeps the app installable on old phones; the app
+        // still runs normally on an API 33 device, because targetSdk is about
+        // which platform behaviours the app opts into, not which devices can
+        // install it. Play requires targetSdk 36 for new apps since 2026-08-31.
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
 
