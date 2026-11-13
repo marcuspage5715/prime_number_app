@@ -105,7 +105,17 @@ fun PrimeCheckerScreen(
                 singleLine = true,
                 isError = state.result is CheckResult.Empty ||
                     state.result is CheckResult.Invalid,
-                supportingText = { Text(text = stringResource(R.string.input_helper)) },
+                // While an input error is showing, the card below carries the
+                // message; keeping the helper text here too would paint
+                // "Digits only, up to 19 digits" red, which reads like the error
+                // itself.
+                supportingText = if (state.result is CheckResult.Empty ||
+                    state.result is CheckResult.Invalid
+                ) {
+                    null
+                } else {
+                    { Text(text = stringResource(R.string.input_helper)) }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done,
