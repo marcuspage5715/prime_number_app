@@ -18,6 +18,7 @@ therefore written once, tested once, and cannot drift between the two.
 - Accepts the full signed 64-bit range: −9,223,372,036,854,775,808 to
   9,223,372,036,854,775,807 (19 digits).
 - Fully offline. No permissions, no network, no analytics, no accounts.
+- Play-ready: signed App Bundle pipeline, store listing copy and artwork included.
 - Works with system dark mode, dynamic colour (Android 12+), font scaling and
   screen readers.
 
@@ -25,12 +26,12 @@ therefore written once, tested once, and cannot drift between the two.
 
 | Tool | Version |
 | --- | --- |
-| Android Studio | Ladybug (2024.2.1) or newer |
-| JDK | 17 or newer (Android Studio's bundled JBR is fine) |
-| Android SDK | Platform 35, Build-Tools 35.0.0 |
-| Device / emulator | Android 7.0 (API 24) or newer |
+| Android Studio | A version that supports AGP 9 — Android Studio offers to update itself if yours is older |
+| JDK | 17 or newer (CI uses 21; Android Studio's bundled JBR is fine) |
+| Android SDK | Platform 36, Build-Tools 36.0.0 |
+| Device / emulator | Android 7.0 (API 24) or newer, including Android 13 / API 33 |
 
-Gradle 8.9 arrives via the wrapper, so you do not need Gradle installed.
+Gradle 9.7.1 arrives via the wrapper, so you do not need Gradle installed.
 
 ## Open and run
 
@@ -78,7 +79,8 @@ on a phone now.
 app/        Android front end: Compose UI, ViewModel, theme, resources
 core/       Pure Kotlin/JVM: parsing, primality, factor search  (no Android)
 cli/        Optional terminal front end, reusing :core
-docs/       Architecture notes and store artwork
+docs/       Architecture notes, privacy policy, store artwork
+PLAY_STORE.md  Play Console submission guide
 ```
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the module graph, data flow
@@ -137,7 +139,7 @@ The two algorithms are checked against each other on every small input, which is
 what makes the port trustworthy: if either implementation broke, the dense-range
 tests fail immediately.
 
-## Signing a release build
+## Signing and releasing
 
 Passwords never belong in the repository. Copy the template and fill it in:
 
@@ -147,7 +149,27 @@ cp keystore.properties.example keystore.properties   # git-ignored
 ```
 
 Without `keystore.properties` the release build still assembles — it is simply
-unsigned, which is what CI does.
+unsigned, which is what the CI workflow does.
+
+To let CI sign and publish instead, add four repository secrets
+(`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`) and push a
+tag:
+
+```bash
+git tag v1.0.0 && git push origin v1.0.0
+```
+
+`.github/workflows/release.yml` then runs the tests and lint, builds a signed AAB
+and APK, verifies both signatures with `jarsigner`, and attaches them plus the R8
+mapping file to a GitHub release. The signing material is written to the runner's
+temp directory and deleted in an `always()` step.
+
+## Publishing to Google Play
+
+[PLAY_STORE.md](PLAY_STORE.md) has the whole submission: store listing copy ready
+to paste, the Data safety answers, content rating, privacy policy hosting on
+GitHub Pages, the upload-key flow, and the closed-testing requirement for new
+personal developer accounts. `docs/` holds the artwork Play asks for.
 
 ## Security posture
 
@@ -183,12 +205,17 @@ Full detail, including the threat model and how to report a problem:
 
 | Component | Version |
 | --- | --- |
-| Android Gradle Plugin | 8.7.3 |
-| Gradle | 8.9 |
-| Kotlin | 2.0.21 |
-| Compose BOM | 2024.10.01 |
-| compileSdk / targetSdk | 35 |
+| Android Gradle Plugin | 9.3.2 (built-in Kotlin) |
+| Gradle | 9.7.1 |
+| Kotlin | 2.3.0 |
+| Compose BOM | 2025.09.01 |
+| compileSdk / targetSdk | 36 |
 | minSdk | 24 (Android 7.0) |
+
+`targetSdk` is 36 because Play has refused new apps below API 36 since
+31 August 2026. It does not affect which devices can install the app: `minSdk`
+24 plus a target of 36 still installs and runs normally on an Android 13 (API 33)
+device. The target level is about which platform behaviours the app opts into.
 
 ## Not included (deliberately)
 

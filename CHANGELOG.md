@@ -22,11 +22,22 @@ The Python Termux script became an Android app.
 - Unit tests for `:core`, `:app` and `:cli`; Compose UI and activity tests.
 - GitHub Actions CI (tests, lint, debug APK) and Dependabot for Gradle and Actions.
 - `SECURITY.md`, `CONTRIBUTING.md`, architecture notes and launcher artwork.
+- Play-ready release pipeline: `.github/workflows/release.yml` builds a signed
+  App Bundle on a `v*` tag, verifies the signature and attaches it to a GitHub
+  release.
+- `PLAY_STORE.md`: listing copy, Data safety answers, content rating, upload-key
+  flow and the closed-testing requirement for new personal developer accounts.
+- Privacy policy (`docs/privacy-policy.md`, ready for GitHub Pages) and Play
+  artwork: 512 px icon and 1024 x 500 feature graphic.
 
 ### Changed
 
 - Primality is now proven in milliseconds for 19-digit inputs, instead of taking
   minutes of trial division on a phone.
+- Targets API 36 with AGP 9.3.2, Gradle 9.7.1, Kotlin 2.3.0 and Compose BOM
+  2025.09.01. Play refuses new apps below API 36 since 2026-08-31; `minSdk` stays
+  24, so API 33 devices are unaffected.
+- AGP 9's built-in Kotlin support replaces the `kotlin-android` plugin.
 - Numbers below 2 are explained in the UI ("Prime numbers start at 2") rather
   than only being given an exit code.
 

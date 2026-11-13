@@ -82,6 +82,12 @@ absent, and the model below is deliberately narrow.
   add its own repository.
 - `.github/dependabot.yml` proposes weekly updates for Gradle and GitHub Actions
   so pinned versions do not become stale versions.
+- Release signing material exists only as repository secrets
+  (`KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`). The
+  release workflow decodes the keystore into the runner's temp directory, writes
+  the git-ignored `keystore.properties`, and deletes both in an `always()` step.
+  No secret is interpolated into a shell command line, so none can appear in a
+  log.
 
 ## Reviewing a change
 
