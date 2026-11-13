@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Platform theme only. All real styling lives in Compose (ui/theme), so this
+      exists just to give the window a sensible background before the first
+      frame and to remove the framework action bar.
+    -->
+    <style name="Theme.PrimeChecker" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+</resources>

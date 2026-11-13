@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Prime Checker</string>
+
+    <string name="screen_intro">Find out whether a whole number is prime.</string>
+
+    <string name="input_label">Whole number</string>
+    <string name="input_helper">Digits only, up to 19 digits. A leading minus sign is allowed.</string>
+
+    <string name="action_check">Check</string>
+    <string name="action_clear">Clear</string>
+
+    <string name="state_checking">Checking…</string>
+    <string name="result_idle">Enter a number and tap Check.</string>
+
+    <string name="result_prime">%1$s is prime</string>
+    <string name="result_not_prime">%1$s is not prime</string>
+    <string name="detail_factor">Divisible by %1$s</string>
+    <string name="detail_no_factor">No prime factor up to %1$s.</string>
+    <string name="detail_below_two">Prime numbers start at 2.</string>
+    <string name="elapsed_ms">Checked in %1$d ms</string>
+
+    <string name="error_empty">Enter a number first.</string>
+    <string name="error_not_a_number">Use digits only, for example 97 or 1234.</string>
+    <string name="error_too_long">Too many digits. Enter at most 19.</string>
+    <string name="error_out_of_range">That number is too large to check.</string>
+
+    <string name="offline_note">Works fully offline. The app has no network permission and collects nothing.</string>
+</resources>
