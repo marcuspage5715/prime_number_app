@@ -46,6 +46,11 @@ jobs:
       - name: Assemble debug APK
         run: ./gradlew --no-daemon :app:assembleDebug
 
+      # Compiles the instrumented tests. Running them needs an emulator, but
+      # compiling them here catches breakage in the Compose tests on every push.
+      - name: Compile instrumented tests
+        run: ./gradlew --no-daemon :app:assembleDebugAndroidTest
+
       # Proves R8 shrinking and the (empty) keep rules work. Unsigned, as no
       # keystore is available on CI.
       - name: Assemble release APK (unsigned)
