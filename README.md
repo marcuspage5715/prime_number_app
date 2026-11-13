@@ -77,9 +77,14 @@ on a phone now.
 
 You do not need Play, a keystore or `adb` to run this on your own device.
 
-CI builds a debug APK on every push. Download it — from the run's `apks`
-artifact on the Actions tab, or wherever the file was handed to you — then on the
-phone:
+**Easiest:** grab `prime-checker-debug.apk` from the
+[Releases page](https://github.com/marcuspage5715/prime_number_app/releases). It is
+attached to the `dev-build` release and downloads straight to a phone, no GitHub
+login needed. The repository archive contains only source — an APK is a build
+output, so it is never committed.
+
+Alternatively CI builds a debug APK on every push; download it from the run's
+`apks` artifact on the Actions tab. Either way, on the phone:
 
 1. Open the `.apk` from your browser or files app.
 2. Android asks whether to allow installs from that app; allow it once.
