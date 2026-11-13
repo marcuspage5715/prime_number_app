@@ -151,12 +151,21 @@ unsigned, which is what CI does.
 
 ## Security posture
 
-Short version: the app asks the system for no capabilities at all, so there is
+Short version: the app asks the user for no capabilities at all, so there is
 nothing to protect.
+
+One honest caveat, verified by decoding the built APK rather than the source
+manifest: AndroidX Core injects a *signature-level* permission named
+`<applicationId>.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`. It protects AndroidX's
+own internal broadcast receivers, is granted automatically to the app itself, is
+never shown to the user, and cannot be requested by any other app. It is not a
+capability — there is still no `INTERNET`, no storage, no contacts, no location.
+The debug build additionally includes Compose's `PreviewActivity` from
+`ui-tooling`, which is `debugImplementation` only and absent from release.
 
 | Decision | Reason |
 | --- | --- |
-| No `INTERNET` permission, no permissions whatsoever | The app cannot leak what it cannot send. Verified in `AndroidManifest.xml`, which contains no `<uses-permission>` element. |
+| No `INTERNET` permission, and no permission the user is ever asked for | The app cannot leak what it cannot send. The source manifest declares none; the merged manifest carries only one signature-level permission AndroidX Core declares for itself (see below). |
 | No analytics, ads or crash SDKs | No third-party runtime, no data collection, nothing to disclose. |
 | `android:allowBackup="false"` | A calculator's input history is not worth syncing to a cloud account. |
 | Only one exported component (the launcher activity) | Nothing else is reachable from other apps. |

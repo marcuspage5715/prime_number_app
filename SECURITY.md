@@ -27,7 +27,8 @@ absent, and the model below is deliberately narrow.
 | --- | --- |
 | Intercept or tamper with traffic | Nothing to intercept: the app has no `INTERNET` permission, so the OS refuses sockets at the kernel boundary. |
 | Steal data at rest | Nothing is stored. There is no database, no preferences file, no cache of user input, and backups are disabled. |
-| Read input from another app | The only exported component is the launcher activity, which takes no intent extras. Input stays in memory. |
+| Reach the app from another app | The release build exposes one component, the launcher activity, which accepts no intent extras. The debug build also carries Compose's `PreviewActivity` (from `ui-tooling`, a debug-only dependency); it is absent from release. |
+| Read input from another app | The launcher activity takes no intent extras; input stays in memory. |
 | Freeze the app with a hostile input | Input is length-bounded before parsing (19 digits) and the factor search is budgeted and cancellable; a superseded computation is dropped. |
 | Install a tampered update | Standard Android signature enforcement applies; use Play App Signing and keep the upload key off any machine that does not need it. |
 | Exploit a dependency | The runtime dependency set is AndroidX/Compose only, pinned exactly, and updated via Dependabot and review. |
@@ -41,8 +42,17 @@ absent, and the model below is deliberately narrow.
 
 ## Design decisions that matter for security
 
-1. **Zero permissions.** The manifest contains no `<uses-permission>` element. If
-   a future change needs one, treat it as a security review item, not a detail.
+1. **No user-facing permissions.** The source manifest contains no
+   `<uses-permission>` element. After manifest merging the APK does contain one
+   permission, declared by AndroidX Core for its own use:
+   `<applicationId>.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`. It is
+   signature-level, so only this app can hold it, it is granted automatically,
+   and it grants no access to device data. It is documented here rather than
+   hidden: any *other* permission appearing in a merged manifest — especially
+   `INTERNET` — should be treated as a security review item, not a detail. Verify
+   with:
+   `unzip -p app-debug.apk AndroidManifest.xml` and a binary-XML decoder, or
+   `./gradlew :app:processDebugMainManifest` and read the merger report.
 2. **No third-party runtime SDKs.** No analytics, ads, crash reporting or
    attribution libraries. Each one would add code that runs in-process and
    collects something.

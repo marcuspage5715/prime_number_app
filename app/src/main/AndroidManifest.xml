@@ -2,10 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
-      This app declares NO permissions at all - not even INTERNET. It computes
+      This manifest declares NO permissions - not even INTERNET. The app computes
       prime numbers locally and has no reason to reach the network, so the
       strongest guarantee available is that it cannot: with no INTERNET
       permission the OS refuses any socket the app might try to open.
+
+      Note for reviewers: after manifest merging, the built APK also contains one
+      signature-level permission that AndroidX Core declares for its own internal
+      receivers (<applicationId>.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION). It is
+      granted automatically, is not shown to the user and grants no device access.
+      Any *other* permission appearing in a merged manifest is a bug.
     -->
 
     <application

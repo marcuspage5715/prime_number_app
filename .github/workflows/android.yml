@@ -46,6 +46,11 @@ jobs:
       - name: Assemble debug APK
         run: ./gradlew --no-daemon :app:assembleDebug
 
+      # Proves R8 shrinking and the (empty) keep rules work. Unsigned, as no
+      # keystore is available on CI.
+      - name: Assemble release APK (unsigned)
+        run: ./gradlew --no-daemon :app:assembleRelease
+
       - name: Upload debug APK
         uses: actions/upload-artifact@v7
         with:
