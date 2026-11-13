@@ -1,9 +1,9 @@
 import java.util.Properties
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    // No kotlin-android plugin: AGP 9 compiles Kotlin itself (built-in Kotlin).
+    // The Compose compiler plugin is still applied explicitly.
     alias(libs.plugins.kotlin.compose)
 }
 
@@ -104,12 +104,6 @@ android {
         unitTests {
             isReturnDefaultValues = true
         }
-    }
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
