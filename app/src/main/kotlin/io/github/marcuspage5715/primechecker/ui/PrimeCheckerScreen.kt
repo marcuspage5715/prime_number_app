@@ -209,9 +209,16 @@ private fun AnalyzedContent(result: CheckResult.Analyzed) {
     val analysis = result.analysis
     val number = remember(analysis.number) { formatNumber(analysis.number) }
 
+    val headline = verdictHeadline(analysis, number)
+
     Text(
-        text = verdictHeadline(analysis, number),
-        style = MaterialTheme.typography.headlineSmall,
+        text = headline,
+        // A 19-digit number with grouping is ~35 characters, which overflows a
+        // 360dp screen at headline size and wraps mid-group ("...693,95" /
+        // "1 is prime"). Step the style down with length instead, so the number
+        // always stays readable as one unit.
+        style = headlineStyle(headline.length),
+        color = MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.Start,
     )
 
@@ -223,11 +230,19 @@ private fun AnalyzedContent(result: CheckResult.Analyzed) {
         )
     }
 
+
     Text(
         text = stringResource(R.string.elapsed_ms, result.elapsedMillis),
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
+}
+
+@Composable
+private fun headlineStyle(length: Int) = when {
+    length <= 18 -> MaterialTheme.typography.headlineSmall
+    length <= 30 -> MaterialTheme.typography.titleLarge
+    else -> MaterialTheme.typography.titleMedium
 }
 
 @Composable
