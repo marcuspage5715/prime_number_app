@@ -73,6 +73,31 @@ Exit codes are unchanged from the Python original: `0` prime, `1` not prime,
 which is heavier than the Python script was — the app is the intended interface
 on a phone now.
 
+## Installing on your phone without a PC
+
+You do not need Play, a keystore or `adb` to run this on your own device.
+
+CI builds a debug APK on every push. Download it — from the run's `apks`
+artifact on the Actions tab, or wherever the file was handed to you — then on the
+phone:
+
+1. Open the `.apk` from your browser or files app.
+2. Android asks whether to allow installs from that app; allow it once.
+3. Play Protect may warn about an unknown developer. Choose **Install anyway**.
+
+Two things worth knowing:
+
+- It is a **debug** build, signed with a throwaway key that CI regenerates each
+  run. Installing a newer build over an older one therefore fails with
+  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`: uninstall the old one first. The app
+  stores nothing, so nothing is lost.
+- The application id ends in `.debug`, so it can sit next to a future release
+  build without a conflict.
+
+When you want installable-by-you *release* builds, generate an upload key and add
+the four signing secrets described in [PLAY_STORE.md](PLAY_STORE.md); that part is
+only needed for distribution, not for your own phone.
+
 ## Project layout
 
 ```
