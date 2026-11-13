@@ -80,9 +80,9 @@ Prime numbers start at 2. Everything else is divisible by something.
 
 **App icon**: `docs/play_store_icon.png` (512 × 512).
 **Feature graphic**: `docs/feature_graphic.png` (1024 × 500).
-**Phone screenshots**: at least 2, up to 8. Capture them from a device or
-emulator (see "Screenshots" below); each must be between 320 and 3840 px on a
-side, with an aspect ratio between 16:9 and 9:16.
+**Phone screenshots**: five are ready in `docs/screenshots/`, all 1080 x 1920
+(9:16) — the empty state, a prime result, a composite with its factor, an invalid
+input and a dark-mode result. Upload them in that order; Play accepts 2 to 8.
 
 ## 3. Data safety
 
@@ -197,15 +197,29 @@ crash reports, and CI attaches it to the GitHub release for you.
 
 ## Screenshots
 
-Capture at least two, ideally four: an empty state, a prime result, a composite
-result with its factor, and an invalid input. From a device:
+`docs/screenshots/` holds five 1080 x 1920 PNGs, ready to upload:
+
+| File | Shows |
+| --- | --- |
+| `01-empty.png` | the empty state and the offline note |
+| `02-prime.png` | "97 is prime" |
+| `03-composite.png` | "91 is not prime" with "Divisible by 7" |
+| `04-invalid.png` | the error state for non-numeric input |
+| `05-dark-prime.png` | dark mode, with a 19-digit prime |
+
+These are not mock-ups. `app/src/test/.../PrimeCheckerScreenshotTest.kt` renders
+the real Compose screen on the JVM with Roborazzi and Robolectric, at a
+360 x 640 dp / xxhdpi canvas (1080 x 1920 px). The numbers in them went through
+the real `PrimeChecker`, and the "Checked in N ms" line is measured, not typed in.
+
+To regenerate after a UI change:
 
 ```bash
-adb shell screencap -p /sdcard/shot.png && adb pull /sdcard/shot.png
+./gradlew :app:recordRoborazziDebug     # writes app/build/screenshots/*.png
 ```
 
-Play prefers 1080 × 1920 or larger. Dark mode screenshots are a nice touch, since
-the app follows the system theme.
+or let CI do it: every push records them and the `screenshots` artifact on the
+run holds the PNGs. No device, no emulator, no `adb`.
 
 ## Things that do not apply here
 

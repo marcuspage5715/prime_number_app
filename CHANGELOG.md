@@ -28,7 +28,10 @@ The Python Termux script became an Android app.
 - `PLAY_STORE.md`: listing copy, Data safety answers, content rating, upload-key
   flow and the closed-testing requirement for new personal developer accounts.
 - Privacy policy (`docs/privacy-policy.md`, ready for GitHub Pages) and Play
-  artwork: 512 px icon and 1024 x 500 feature graphic.
+  artwork: 512 px icon, 1024 x 500 feature graphic, and five 1080 x 1920
+  screenshots in `docs/screenshots/`.
+- Roborazzi screenshot tests: the real UI is rendered on the JVM, so store
+  screenshots and layout checks need no device or emulator.
 
 ### Changed
 
@@ -40,6 +43,14 @@ The Python Termux script became an Android app.
 - AGP 9's built-in Kotlin support replaces the `kotlin-android` plugin.
 - Numbers below 2 are explained in the UI ("Prime numbers start at 2") rather
   than only being given an exit code.
+
+### Fixed
+
+- A 19-digit result wrapped mid-digit-group ("...693,95" / "1 is prime"); the
+  verdict headline now steps down a type size with its length.
+- On invalid input the field's helper text was painted in the error colour while
+  the real message sat in the card, so the screen appeared to complain about the
+  wrong thing.
 
 ### Security
 

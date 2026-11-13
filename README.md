@@ -79,7 +79,7 @@ on a phone now.
 app/        Android front end: Compose UI, ViewModel, theme, resources
 core/       Pure Kotlin/JVM: parsing, primality, factor search  (no Android)
 cli/        Optional terminal front end, reusing :core
-docs/       Architecture notes, privacy policy, store artwork
+docs/       Architecture notes, privacy policy, store artwork and screenshots
 PLAY_STORE.md  Play Console submission guide
 ```
 
@@ -122,6 +122,7 @@ of the range.
 
 ```bash
 ./gradlew :core:test :app:testDebugUnitTest :cli:test   # JVM, no device needed
+./gradlew :app:recordRoborazziDebug                     # regenerate store screenshots
 ./gradlew :app:connectedDebugAndroidTest                # needs a device/emulator
 ./gradlew :app:lintDebug                                # Android lint
 ```
@@ -134,6 +135,7 @@ of the range.
 | `core/…/PrimeCheckerTest` | verdict mapping for primes, composites, values below 2 |
 | `app/…/PrimeCheckerViewModelTest` | state transitions, truncation, clearing, error paths |
 | `app/androidTest/…` | the screen and the real activity, typed into and tapped |
+| `app/…/PrimeCheckerScreenshotTest` | renders the real UI on the JVM (Roborazzi + Robolectric) into 1080 x 1920 PNGs — the Play Store screenshots in `docs/screenshots/`, and a layout regression check |
 
 The two algorithms are checked against each other on every small input, which is
 what makes the port trustworthy: if either implementation broke, the dense-range
