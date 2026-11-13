@@ -5,6 +5,9 @@ plugins {
     // No kotlin-android plugin: AGP 9 compiles Kotlin itself (built-in Kotlin).
     // The Compose compiler plugin is still applied explicitly.
     alias(libs.plugins.kotlin.compose)
+    // JVM screenshot tests: renders the real Compose UI with Robolectric, so
+    // store screenshots and layout checks need no emulator.
+    alias(libs.plugins.roborazzi)
 }
 
 // Release signing is read from an untracked keystore.properties. If the file is
@@ -103,6 +106,9 @@ android {
     testOptions {
         unitTests {
             isReturnDefaultValues = true
+            // Robolectric needs the merged resources and manifest to render the
+            // real UI in screenshot tests.
+            isIncludeAndroidResources = true
         }
     }
 }
@@ -127,6 +133,12 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.junit.rule)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
 
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

@@ -40,6 +40,20 @@ jobs:
       - name: Unit tests
         run: ./gradlew --no-daemon :core:test :app:testDebugUnitTest :cli:test
 
+      # Renders the real Compose UI on the JVM: produces the store screenshots
+      # and fails on an unexpected layout change.
+      - name: Record screenshots
+        run: ./gradlew --no-daemon :app:recordRoborazziDebug
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: app/build/screenshots/*.png
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Lint
         run: ./gradlew --no-daemon :app:lintDebug
 
